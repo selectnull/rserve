@@ -1,0 +1,9 @@
+[package]
+name = "rserve"
+version = "0.1.0"
+authors = ["Sasha Matijasic <sasha@selectnull.com>"]
+
+[dependencies]
+iron = "*"
+hoedown = "3.0.2"
+mime = "0.0.11"

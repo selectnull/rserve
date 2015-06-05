@@ -1,11 +1,13 @@
 extern crate iron;
 extern crate hoedown;
 #[macro_use] extern crate mime;
+extern crate getopts;
 
 use std::env;
 use std::io::prelude::*;
 use std::fs::File;
 use std::path::Path;
+use std::net::{SocketAddrV4, Ipv4Addr};
 
 use iron::prelude::*;
 use iron::mime::Mime;
@@ -16,6 +18,8 @@ use hoedown::renderer::html::Html;
 use hoedown::renderer::html;
 use hoedown::renderer::Render;
 use hoedown::Buffer;
+
+use getopts::Options;
 
 
 fn get_filename(path: &Vec<String>) -> String {
@@ -63,11 +67,30 @@ fn response(request: &mut Request) -> Response {
 }
 
 fn main() {
+    let args: Vec<String> = env::args().collect();
+    // parse command line arguments
+    let mut opts = Options::new();
+    opts.optflag("h", "help", "Show help");
+
+    let matches = match opts.parse(&args[1..]) {
+        Ok(m) => m,
+        Err(e) => panic!(e.to_string())
+    };
+
+    if matches.opt_present("h") {
+        let u = format!("Usage: {} [options]", &args[0]);
+        print!("{}", opts.usage(&u));
+        return
+    }
+
     let address = "localhost:8000";
     let cd = env::current_dir().unwrap();
     println!("Listening on {} from {}", address, cd.display());
 
+    let ip = Ipv4Addr::new(127, 0, 0, 1);
+    let port = 8000;
+
     Iron::new(|request: &mut Request| {
         Ok(response(request))
-    }).http(address).unwrap();
+    }).http(SocketAddrV4::new(ip, port)).unwrap();
 }

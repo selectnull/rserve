@@ -7,3 +7,4 @@ authors = ["Sasha Matijasic <sasha@selectnull.com>"]
 iron = "*"
 hoedown = "3.0.2"
 mime = "0.0.11"
+getopts = "0.2.11"

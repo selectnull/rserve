@@ -2,6 +2,7 @@
 name = "rserve"
 version = "0.1.0"
 dependencies = [
+ "getopts 0.2.11 (registry+https://github.com/rust-lang/crates.io-index)",
  "hoedown 3.0.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "iron 0.1.18 (registry+https://github.com/rust-lang/crates.io-index)",
  "mime 0.0.11 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -49,6 +50,14 @@ dependencies = [
 name = "gcc"
 version = "0.3.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
+
+[[package]]
+name = "getopts"
+version = "0.2.11"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+dependencies = [
+ "log 0.3.1 (registry+https://github.com/rust-lang/crates.io-index)",
+]
 
 [[package]]
 name = "hoedown"

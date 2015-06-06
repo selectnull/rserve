@@ -66,12 +66,19 @@ fn response(request: &mut Request) -> Response {
     ))
 }
 
+fn get_address(port: u16) -> SocketAddrV4 {
+    let ip = Ipv4Addr::new(127, 0, 0, 1);
+    SocketAddrV4::new(ip, port)
+}
+
 fn main() {
+    // define command line arguments
     let args: Vec<String> = env::args().collect();
-    // parse command line arguments
     let mut opts = Options::new();
+    opts.optopt("p", "port", "Set port", "port");
     opts.optflag("h", "help", "Show help");
 
+    // parse command line arguments
     let matches = match opts.parse(&args[1..]) {
         Ok(m) => m,
         Err(e) => panic!(e.to_string())
@@ -83,14 +90,17 @@ fn main() {
         return
     }
 
-    let address = "localhost:8000";
+    let port: u16 = match matches.opt_default("p", "8000") {
+        Some(p) => p.parse().unwrap(),
+        None => 8000,
+    };
+
+    // run program
+    let address = get_address(port);
     let cd = env::current_dir().unwrap();
     println!("Listening on {} from {}", address, cd.display());
 
-    let ip = Ipv4Addr::new(127, 0, 0, 1);
-    let port = 8000;
-
     Iron::new(|request: &mut Request| {
         Ok(response(request))
-    }).http(SocketAddrV4::new(ip, port)).unwrap();
+    }).http(address).unwrap();
 }
